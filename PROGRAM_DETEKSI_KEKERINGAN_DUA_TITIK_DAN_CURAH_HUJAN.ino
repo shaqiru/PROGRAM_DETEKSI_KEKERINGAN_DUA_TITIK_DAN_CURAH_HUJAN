@@ -1,16 +1,11 @@
 
-//Curah hujan adalah jumlah air yang jatuh di permukaan tanah selama periode tertentu yang diukur dengan satuan tinggi milimeter (mm) di atas permukaan horizontal.
-//Curah hujan 1 mm adalah jumlah air hujan yang jatuh di permukaan per satuan luas (m2) dengan volume sebanyak 1 liter tanpa ada yang menguap, meresap atau mengalir (Aldrian dkk, 2011).Curah hujan adalah jumlah air yang jatuh di permukaan tanah selama periode tertentu yang diukur dengan satuan tinggi milimeter (mm) di atas permukaan horizontal. Curah hujan 1 mm adalah jumlah air hujan yang jatuh di permukaan per satuan luas (m2) dengan volume sebanyak 1 liter tanpa ada yang menguap, meresap atau mengalir (Aldrian dkk, 2011).
-
-//Perhitungan rumus
-//Tinggi curah hujan (cm) = volume yang dikumpulkan (mL) / area pengumpulan (cm2)
-//Luas kolektor (Corong) 5,5cm x 3,5cm = 19,25 cm2
-//Koleksi per ujung tip kami dapat dengan cara menuangkan 100ml air ke kolektor kemudian menghitung berapa kali air terbuang dari tip,
-//Dalam perhitungan yang kami lakukan air terbuang sebanyak 70 kali. 100ml / 70= 1.42mL per tip.
-//Jadi 1 tip bernilai 1.42 / 19.25 = 0,07cm atau 0.70 mm curah hujan.
-
-// PENTING
-// Nilai kalibrasi yang kami lakukan berlaku untuk semua sensor curah hujan yang kami jual tentu Anda dapat melakukan kalibrasi ulang sendiri jika dibutuhkan.
+// Program Deteksi Dini Kekeringan dengan ESP32
+// Menggunakan Rain Gauge untuk mengukur curah hujan
+// dan Soil Moisture Sensor untuk mengukur tingkat kelembaban tanah
+// digunakan dua sensor soil moisture sebagai perbandingan nilai
+// Data dikirim ke Telegram dan Antares
+// Pada Telegram hanya dikirim curah hujan dan satu titik soil moisture
+// Sedangkan Antares semua data dikirim
 
 #include <Wire.h>
 #include "RTClib.h"
