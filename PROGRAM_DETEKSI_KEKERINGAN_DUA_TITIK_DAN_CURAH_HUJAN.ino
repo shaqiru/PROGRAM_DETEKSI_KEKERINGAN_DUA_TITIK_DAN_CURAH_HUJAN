@@ -15,6 +15,8 @@
 #include <Wire.h>
 #include "RTClib.h"
 
+#include <AntaresESP32HTTP.h>
+
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
 
@@ -49,6 +51,13 @@ float kelembaban_tanah;
 #define BOTtoken "1538752478:AAGCyJ3gdkx3zlEhlxFxonLJdbKuGwDISFE" //token bot telegram
 #define idChat "-465629527" //idbot
 
+#define ACCESSKEY "your-access-key"       // Ganti dengan access key akun Antares anda
+// #define WIFISSID "your-wifi-ssid"         // Ganti dengan SSID WiFi anda
+// #define PASSWORD "your-wifi-password"     // Ganti dengan password WiFi anda
+
+#define applicationName "your-application-name"   // Ganti dengan application name Antares yang telah dibuat
+#define deviceName "your-device-name"     // Ganti dengan device Antares yang telah dibuat
+
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
 
@@ -57,6 +66,8 @@ char password[] = "HAYASAKA"; //password wifi
 
 String cuaca_harian = "Aman";
 String cuaca_pekanan = "Aman";
+
+AntaresESP32HTTP antares(ACCESSKEY);    // Buat objek antares
 
 volatile boolean flag = false;
 
@@ -72,6 +83,8 @@ void setup()
 {
   Serial.begin(9600);
 
+  antares.setDebug(true);
+  
   pinMode(pin_interrupt, INPUT);
   attachInterrupt(digitalPinToInterrupt(pin_interrupt), hitung_curah_hujan, FALLING); // Akan menghitung tip jika pin berlogika dari HIGH ke LOW
   // Inisialisasi RTC
@@ -120,7 +133,7 @@ void loop()
   float kelembaban_tanah1 = (3.3 - kelembaban1) / 0.95 * 100.0;
 
   // Program baca soil moisture titik 2
-  float kelembaban2 = (analogRead(random(20,30))/4096.0) * 3.3;
+  float kelembaban2 = (analogRead(soil_pin2)/4096.0) * 3.3;
   float kelembaban_tanah2 = (3.3 - kelembaban2) / 0.95 * 100.0;
 
   
@@ -219,6 +232,14 @@ void loop()
       rainday += " %\n";
       bot.sendMessage(idChat, rainday, "");
       Serial.print("Mengirim data sensor ke telegram");
+
+      antares.add("dailyrain", curah_hujan_per_hari);
+      antares.add("weeklyrain", curah_hujan_per_pekan);
+      antares.add("kelembaban1", kelembaban1);
+      antares.add("kelembaban2", kelembaban2);
+    
+      // Kirim dari penampungan data ke Antares
+      antares.send(applicationName, deviceName);
     }
     if (menit.equals("0") && jam.equals("12"))
     {
@@ -234,6 +255,14 @@ void loop()
       rainday += " %\n";
       bot.sendMessage(idChat, rainday, "");
       Serial.print("Mengirim data sensor ke telegram");
+
+      antares.add("dailyrain", curah_hujan_per_hari);
+      antares.add("weeklyrain", curah_hujan_per_pekan);
+      antares.add("kelembaban1", kelembaban1);
+      antares.add("kelembaban2", kelembaban2);
+    
+      // Kirim dari penampungan data ke Antares
+      antares.send(applicationName, deviceName);
     }
     if (menit.equals("0") && jam.equals("18"))
     {
@@ -249,6 +278,14 @@ void loop()
       rainday += " %\n";
       bot.sendMessage(idChat, rainday,  "");
       Serial.print("Mengirim data sensor ke telegram");
+
+      antares.add("dailyrain", curah_hujan_per_hari);
+      antares.add("weeklyrain", curah_hujan_per_pekan);
+      antares.add("kelembaban1", kelembaban1);
+      antares.add("kelembaban2", kelembaban2);
+    
+      // Kirim dari penampungan data ke Antares
+      antares.send(applicationName, deviceName);
     }
     if (menit.equals("0") && jam.equals("0"))
     {
@@ -264,6 +301,14 @@ void loop()
       rainday += " %\n";
       bot.sendMessage(idChat, rainday,  "");
       Serial.print("Mengirim data sensor ke telegram");
+
+      antares.add("dailyrain", curah_hujan_per_hari);
+      antares.add("weeklyrain", curah_hujan_per_pekan);
+      antares.add("kelembaban1", kelembaban1);
+      antares.add("kelembaban2", kelembaban2);
+    
+      // Kirim dari penampungan data ke Antares
+      antares.send(applicationName, deviceName);
     }
   }
  }
